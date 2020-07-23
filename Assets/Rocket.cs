@@ -6,10 +6,15 @@ using UnityEngine;
 public class Rocket : MonoBehaviour {
 
 	Rigidbody rb;
+	AudioSource thrustSound;
+	bool m_Play;
+	bool m_ToggleChange;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		thrustSound = GetComponent<AudioSource>();
+
 	}
 	
 	// Update is called once per frame
@@ -22,6 +27,12 @@ public class Rocket : MonoBehaviour {
         if(Input.GetKey(KeyCode.Space)) {
 			print("Thrust engaged!"); // DEBUG
 			rb.AddRelativeForce(Vector3.up);
+
+			if(!thrustSound.isPlaying) {
+				thrustSound.Play();
+			}
+		} else {
+			thrustSound.Stop();
 		}
 
 		if(Input.GetKey(KeyCode.A)) {
