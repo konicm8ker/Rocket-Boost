@@ -1,46 +1,62 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
-public class Rocket : MonoBehaviour {
+public class Rocket : MonoBehaviour
+{
 
 	Rigidbody rb;
 	AudioSource thrustSound;
-	bool m_Play;
-	bool m_ToggleChange;
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 		rb = GetComponent<Rigidbody>();
 		thrustSound = GetComponent<AudioSource>();
-
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		ProcessInput();
+	void Update()
+	{
+		Thrust();
+		Rotate();
 	}
 
-    private void ProcessInput()
-    {
-        if(Input.GetKey(KeyCode.Space)) {
+    private void Thrust()
+	{
+        if(Input.GetKey(KeyCode.Space))
+		{
 			print("Thrust engaged!"); // DEBUG
 			rb.AddRelativeForce(Vector3.up);
-
-			if(!thrustSound.isPlaying) {
+			if(!thrustSound.isPlaying)
+			{
 				thrustSound.Play();
 			}
-		} else {
+		}
+		else
+		{
 			thrustSound.Stop();
 		}
+    }
 
-		if(Input.GetKey(KeyCode.A)) {
+	private void Rotate()
+    {
+		rb.freezeRotation = true;  // Take manual control of rotation
+
+        if(Input.GetKey(KeyCode.A))
+		{
 			print("Rotating left.");  // DEBUG
 			transform.Rotate(Vector3.forward);
-		} else if(Input.GetKey(KeyCode.D)) {
+		}
+		else if(Input.GetKey(KeyCode.D))
+		{
 			print("Rotating right.");  // DEBUG
 			transform.Rotate(-Vector3.forward);
 		}
+
+		rb.freezeRotation = false; // Resume physics control
     }
+
 }
