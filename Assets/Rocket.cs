@@ -7,6 +7,8 @@ using UnityEngine;
 public class Rocket : MonoBehaviour
 {
 
+	[SerializeField] float rcsThrust = 250f;
+	[SerializeField] float mainThrust = 40f;
 	Rigidbody rb;
 	AudioSource thrustSound;
 
@@ -29,7 +31,7 @@ public class Rocket : MonoBehaviour
         if(Input.GetKey(KeyCode.Space))
 		{
 			print("Thrust engaged!"); // DEBUG
-			rb.AddRelativeForce(Vector3.up);
+			rb.AddRelativeForce(Vector3.up * mainThrust);
 			if(!thrustSound.isPlaying)
 			{
 				thrustSound.Play();
@@ -43,17 +45,18 @@ public class Rocket : MonoBehaviour
 
 	private void Rotate()
     {
+		float rotationThisFrame = rcsThrust * Time.deltaTime;
 		rb.freezeRotation = true;  // Take manual control of rotation
 
         if(Input.GetKey(KeyCode.A))
 		{
 			print("Rotating left.");  // DEBUG
-			transform.Rotate(Vector3.forward);
+			transform.Rotate(Vector3.forward * rotationThisFrame);
 		}
 		else if(Input.GetKey(KeyCode.D))
 		{
 			print("Rotating right.");  // DEBUG
-			transform.Rotate(-Vector3.forward);
+			transform.Rotate(-Vector3.forward * rotationThisFrame);
 		}
 
 		rb.freezeRotation = false; // Resume physics control
