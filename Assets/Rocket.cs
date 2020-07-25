@@ -26,7 +26,7 @@ public class Rocket : MonoBehaviour
 		Rotate();
 	}
 
-	void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
 	{
 		switch(collision.gameObject.tag)
 		{
