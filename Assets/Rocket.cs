@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// TODO: Fix lighting bug when loading scene
-
 public class Rocket : MonoBehaviour
 {
 
 	[SerializeField] float rcsThrust = 250f;
 	[SerializeField] float mainThrust = 40f;
-	[SerializeField] AudioClip MainEngine;
-	[SerializeField] AudioClip DeathSound;
-	[SerializeField] AudioClip LevelComplete;
+
+	[SerializeField] AudioClip mainEngine;
+	[SerializeField] AudioClip death;
+	[SerializeField] AudioClip success;
+
+	[SerializeField] ParticleSystem mainEngineParticles;
+	[SerializeField] ParticleSystem deathParticles;
+	[SerializeField] ParticleSystem successParticles;
+
 	Rigidbody rb;
 	AudioSource rocketAudio;
 
@@ -41,7 +45,7 @@ public class Rocket : MonoBehaviour
 		switch(collision.gameObject.tag)
 		{
 			case "Friendly":
-				print("OK.");
+				print("OK."); // DEBUG
 				break;
             case "Finish":
                 StartSuccessSequence();
@@ -54,19 +58,22 @@ public class Rocket : MonoBehaviour
 
     private void StartDeathSequence()
     {
-        print("You DIED.");
+        print("You DIED."); // DEBUG
         rocketAudio.Stop();
-        rocketAudio.PlayOneShot(DeathSound);
+		mainEngineParticles.Stop();
+        rocketAudio.PlayOneShot(death);
+		deathParticles.Play();
         state = State.Dying;
-        Invoke("LoadFirstLevel", 3f); // parameterize time
+        Invoke("LoadFirstLevel", 3f); // Parameterize time
     }
 
     private void StartSuccessSequence()
     {
         print("Finished level.");
-        rocketAudio.PlayOneShot(LevelComplete);
+        rocketAudio.PlayOneShot(success);
+		successParticles.Play();
         state = State.Transcending;
-        Invoke("LoadNextLevel", 3f); // parameterize time
+        Invoke("LoadNextLevel", 3f); // Parameterize time
     }
 
     private void LoadNextLevel()
@@ -88,6 +95,7 @@ public class Rocket : MonoBehaviour
         else
 		{
 			rocketAudio.Stop();
+			mainEngineParticles.Stop();
 		}
     }
 
@@ -97,8 +105,9 @@ public class Rocket : MonoBehaviour
         rb.AddRelativeForce(Vector3.up * mainThrust);
         if (!rocketAudio.isPlaying)
         {
-            rocketAudio.PlayOneShot(MainEngine);
+            rocketAudio.PlayOneShot(mainEngine);
         }
+		mainEngineParticles.Play();
     }
 
     private void RespondToRotateInput()
