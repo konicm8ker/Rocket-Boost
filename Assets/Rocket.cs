@@ -8,8 +8,11 @@ public class Rocket : MonoBehaviour
 
 	[SerializeField] float rcsThrust = 250f;
 	[SerializeField] float mainThrust = 40f;
+	[SerializeField] AudioClip MainEngine;
+	[SerializeField] AudioClip DeathSound;
+	[SerializeField] AudioClip LevelComplete;
 	Rigidbody rb;
-	AudioSource thrustSound;
+	AudioSource rocketAudio;
 
 	enum State {Alive, Dying, Transcending};
 	State state = State.Alive;
@@ -18,7 +21,7 @@ public class Rocket : MonoBehaviour
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
-		thrustSound = GetComponent<AudioSource>();
+		rocketAudio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -26,8 +29,8 @@ public class Rocket : MonoBehaviour
 	{
 		if(state == State.Alive)
 		{
-			Thrust();
-			Rotate();
+			RespondToThrustInput();
+			RespondToRotateInput();
 		}
 	}
 
@@ -41,18 +44,30 @@ public class Rocket : MonoBehaviour
 				print("OK.");
 				break;
             case "Finish":
-                print("Finished level.");
-				state = State.Transcending;
-                Invoke("LoadNextLevel", 1f); // parameterize time
+                StartSuccessSequence();
                 break;
             default:
-                print("You DIED.");
-				thrustSound.Stop();
-				state = State.Dying;
-                Invoke("LoadFirstLevel", 3f); // parameterize time
+                StartDeathSequence();
                 break;
         }
 	}
+
+    private void StartDeathSequence()
+    {
+        print("You DIED.");
+        rocketAudio.Stop();
+        rocketAudio.PlayOneShot(DeathSound);
+        state = State.Dying;
+        Invoke("LoadFirstLevel", 3f); // parameterize time
+    }
+
+    private void StartSuccessSequence()
+    {
+        print("Finished level.");
+        rocketAudio.PlayOneShot(LevelComplete);
+        state = State.Transcending;
+        Invoke("LoadNextLevel", 3f); // parameterize time
+    }
 
     private void LoadNextLevel()
     {
@@ -64,24 +79,29 @@ public class Rocket : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    private void Thrust()
+    private void RespondToThrustInput()
 	{
         if(Input.GetKey(KeyCode.Space))
+        {
+            EngageThrust();
+        }
+        else
 		{
-			print("Thrust engaged!"); // DEBUG
-			rb.AddRelativeForce(Vector3.up * mainThrust);
-			if(!thrustSound.isPlaying)
-			{
-				thrustSound.Play();
-			}
-		}
-		else
-		{
-			thrustSound.Stop();
+			rocketAudio.Stop();
 		}
     }
 
-	private void Rotate()
+    private void EngageThrust()
+    {
+        print("Thrust engaged!"); // DEBUG
+        rb.AddRelativeForce(Vector3.up * mainThrust);
+        if (!rocketAudio.isPlaying)
+        {
+            rocketAudio.PlayOneShot(MainEngine);
+        }
+    }
+
+    private void RespondToRotateInput()
     {
 		float rotationThisFrame = rcsThrust * Time.deltaTime;
 		rb.freezeRotation = true;  // Take manual control of rotation
