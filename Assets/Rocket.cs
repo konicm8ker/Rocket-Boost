@@ -24,7 +24,6 @@ public class Rocket : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		// Somewhere stop thrust sound when dying
 		if(state == State.Alive)
 		{
 			Thrust();
@@ -48,6 +47,7 @@ public class Rocket : MonoBehaviour
                 break;
             default:
                 print("You DIED.");
+				thrustSound.Stop();
 				state = State.Dying;
                 Invoke("LoadFirstLevel", 3f); // parameterize time
                 break;
