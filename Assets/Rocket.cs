@@ -14,6 +14,7 @@ public class Rocket : MonoBehaviour
 	[SerializeField] ParticleSystem mainEngineParticles;
 	[SerializeField] ParticleSystem deathParticles;
 	[SerializeField] ParticleSystem successParticles;
+	[SerializeField] ParticleSystem damageParticles;
 
 	Rigidbody rb;
 	AudioSource rocketAudio;
@@ -63,6 +64,7 @@ public class Rocket : MonoBehaviour
 		mainEngineParticles.Stop();
         rocketAudio.PlayOneShot(death);
 		deathParticles.Play();
+		damageParticles.Play();
         state = State.Dying;
         Invoke("LoadFirstLevel", 3f); // Parameterize time
     }
