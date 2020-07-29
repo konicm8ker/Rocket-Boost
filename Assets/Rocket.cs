@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+
+// TODO: Fix lighting bug when loading scene
 
 public class Rocket : MonoBehaviour
 {
@@ -11,6 +10,9 @@ public class Rocket : MonoBehaviour
 	[SerializeField] float mainThrust = 40f;
 	Rigidbody rb;
 	AudioSource thrustSound;
+
+	enum State {Alive, Dying, Transcending};
+	State state = State.Alive;
 
 	// Use this for initialization
 	void Start()
@@ -22,22 +24,45 @@ public class Rocket : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		Thrust();
-		Rotate();
+		// Somewhere stop thrust sound when dying
+		if(state == State.Alive)
+		{
+			Thrust();
+			Rotate();
+		}
 	}
 
     void OnCollisionEnter(Collision collision)
 	{
+		if(state != State.Alive) { return; } // Ignore collisons when dead
+
 		switch(collision.gameObject.tag)
 		{
 			case "Friendly":
 				print("OK.");
 				break;
-			default:
-				print("You DIED.");
-				break;
-		}
+            case "Finish":
+                print("Finished level.");
+				state = State.Transcending;
+                Invoke("LoadNextLevel", 1f); // parameterize time
+                break;
+            default:
+                print("You DIED.");
+				state = State.Dying;
+                Invoke("LoadFirstLevel", 3f); // parameterize time
+                break;
+        }
 	}
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1); // Allow for more than 2 levels
+    }
+
+	private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
 
     private void Thrust()
 	{
