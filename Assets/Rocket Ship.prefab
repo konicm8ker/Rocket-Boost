@@ -671,6 +671,7 @@ MonoBehaviour:
   mainEngineParticles: {fileID: 198918250677286276}
   deathParticles: {fileID: 198911811712030502}
   successParticles: {fileID: 198503939550218110}
+  damageParticles: {fileID: 198221620182678516}
 --- !u!135 &135648641638987804
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -755,7 +756,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1088109548
+  randomSeed: -1221205570
   InitialModule:
     serializedVersion: 3
     enabled: 1

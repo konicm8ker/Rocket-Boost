@@ -72,8 +72,11 @@ public class Rocket : MonoBehaviour
     private void StartSuccessSequence()
     {
         print("Finished level.");
+		rocketAudio.Stop(); // Stop all sounds before success sequence
         rocketAudio.PlayOneShot(success);
 		successParticles.Play();
+		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
+		mainEngineParticles.Stop(); // Hide mainEngine particles
         state = State.Transcending;
         Invoke("LoadNextLevel", 3f); // Parameterize time
     }
