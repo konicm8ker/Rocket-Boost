@@ -3,8 +3,8 @@
 public class CameraController : MonoBehaviour {
 
 	public Transform target;
-	public float offset = 26f;
-	public float speed = 0.125f;
+	public float offset = 14f;
+	public float speed = 0.25f;
 
 	void LateUpdate()
 	{
@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour {
 		{
 			transform.position = new Vector3(transform.position.x,(transform.position.y - speed),transform.position.z);
 		}
+
 	}
 
 }
