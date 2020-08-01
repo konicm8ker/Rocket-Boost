@@ -6,6 +6,7 @@ public class Rocket : MonoBehaviour
 
 	[SerializeField] float rcsThrust = 250f;
 	[SerializeField] float mainThrust = 35f;
+	[SerializeField] float levelLoadDelay = 3f;
 
 	[SerializeField] AudioClip mainEngine;
 	[SerializeField] AudioClip death;
@@ -66,7 +67,7 @@ public class Rocket : MonoBehaviour
 		deathParticles.Play();
 		damageParticles.Play();
         state = State.Dying;
-        Invoke("LoadFirstLevel", 3f); // Parameterize time
+        Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
     private void StartSuccessSequence()
@@ -78,7 +79,7 @@ public class Rocket : MonoBehaviour
 		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
 		mainEngineParticles.Stop(); // Hide mainEngine particles
         state = State.Transcending;
-        Invoke("LoadNextLevel", 3f); // Parameterize time
+        Invoke("LoadNextLevel", levelLoadDelay);
     }
 
     private void LoadNextLevel()
