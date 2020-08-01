@@ -107,7 +107,7 @@ public class Rocket : MonoBehaviour
     private void EngageThrust()
     {
         print("Thrust engaged!"); // DEBUG
-        rb.AddRelativeForce(Vector3.up * mainThrust);
+        rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
         if (!rocketAudio.isPlaying)
         {
             rocketAudio.PlayOneShot(mainEngine);
