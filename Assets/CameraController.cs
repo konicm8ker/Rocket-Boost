@@ -2,9 +2,9 @@
 
 public class CameraController : MonoBehaviour {
 
-	public Transform target;
-	public float offset = 14f;
-	public float speed = 0.25f;
+	[SerializeField] Transform target;
+	[SerializeField] float offset = 14f;
+	[SerializeField] float speed = 0.25f;
 
 	void LateUpdate()
 	{
