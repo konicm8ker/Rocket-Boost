@@ -20,7 +20,7 @@ public class Rocket : MonoBehaviour
 
 	Rigidbody rb;
 	AudioSource rocketAudio;
-	int currentLevel;
+	static int lives = 3;
 
 	enum State {Alive, Dying, Transcending};
 	State state = State.Alive;
@@ -28,7 +28,6 @@ public class Rocket : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		currentLevel = 1;
 		rb = GetComponent<Rigidbody>();
 		rocketAudio = GetComponent<AudioSource>();
 	}
@@ -89,7 +88,6 @@ public class Rocket : MonoBehaviour
 
 	private void LoadLevelThree()
 	{
-		currentLevel = 3;
 		SceneManager.LoadScene("Level 3");
 	}
 
@@ -107,7 +105,6 @@ public class Rocket : MonoBehaviour
 
 	private void LoadLevelFour()
 	{
-		currentLevel = 4;
 		SceneManager.LoadScene("Level 4");
 	}
 
@@ -125,7 +122,6 @@ public class Rocket : MonoBehaviour
 
 	private void LoadLevelFive()
 	{
-		currentLevel = 5;
 		SceneManager.LoadScene("Level 5");
 	}
 
@@ -143,7 +139,6 @@ public class Rocket : MonoBehaviour
 
 	private void LoadLevelSix()
 	{
-		currentLevel = 6;
 		SceneManager.LoadScene("Level 6");
 	}
 
@@ -151,14 +146,30 @@ public class Rocket : MonoBehaviour
 
     private void StartDeathSequence()
     {
-        print("You DIED."); // DEBUG
-        rocketAudio.Stop();
-		mainEngineParticles.Stop();
-        rocketAudio.PlayOneShot(death, 0.5f);
-		deathParticles.Play();
-		damageParticles.Play();
-        state = State.Dying;
-        Invoke("LoadFirstLevel", levelLoadDelay);
+		if(lives > 0)
+		{
+			print("You DIED."); // DEBUG
+			rocketAudio.Stop();
+			mainEngineParticles.Stop();
+			rocketAudio.PlayOneShot(death, 0.5f);
+			deathParticles.Play();
+			damageParticles.Play();
+			state = State.Dying;
+			lives = lives - 1;
+			Invoke("RestartCurrentLevel", levelLoadDelay);
+		}
+		else
+		{
+			print("You DIED."); // DEBUG
+			rocketAudio.Stop();
+			mainEngineParticles.Stop();
+			rocketAudio.PlayOneShot(death, 0.5f);
+			deathParticles.Play();
+			damageParticles.Play();
+			state = State.Dying;
+			lives = 3;
+			Invoke("LoadFirstLevel", levelLoadDelay);
+		}
     }
 
     private void StartSuccessSequence()
@@ -175,15 +186,18 @@ public class Rocket : MonoBehaviour
 
     private void LoadNextLevel()
     {
-		currentLevel = 2;
         SceneManager.LoadScene("Level 2"); // Allow for more than 2 levels
     }
 
 	private void LoadFirstLevel()
     {
-		currentLevel = 1;
         SceneManager.LoadScene("Level 1");
     }
+
+	private void RestartCurrentLevel()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
 
     private void RespondToThrustInput()
 	{
