@@ -18,16 +18,16 @@ public class Rocket : MonoBehaviour
 	[SerializeField] ParticleSystem successParticles;
 	[SerializeField] ParticleSystem damageParticles;
 
+
 	Rigidbody rb;
 	AudioSource rocketAudio;
-	static int lives = 3;
-
 	enum State {Alive, Dying, Transcending};
 	State state = State.Alive;
 
 	// Use this for initialization
 	void Start()
 	{
+		print("Lives: " + PlayerStats.Lives);
 		rb = GetComponent<Rigidbody>();
 		rocketAudio = GetComponent<AudioSource>();
 	}
@@ -40,6 +40,7 @@ public class Rocket : MonoBehaviour
 			RespondToThrustInput();
 			RespondToRotateInput();
 		}
+
 	}
 
     void OnCollisionEnter(Collision collision)
@@ -146,7 +147,7 @@ public class Rocket : MonoBehaviour
 
     private void StartDeathSequence()
     {
-		if(lives > 0)
+		if(PlayerStats.Lives > 0)
 		{
 			print("You DIED."); // DEBUG
 			rocketAudio.Stop();
@@ -155,7 +156,7 @@ public class Rocket : MonoBehaviour
 			deathParticles.Play();
 			damageParticles.Play();
 			state = State.Dying;
-			lives = lives - 1;
+			PlayerStats.Lives -= 1;
 			Invoke("RestartCurrentLevel", levelLoadDelay);
 		}
 		else
@@ -167,7 +168,7 @@ public class Rocket : MonoBehaviour
 			deathParticles.Play();
 			damageParticles.Play();
 			state = State.Dying;
-			lives = 3;
+			PlayerStats.Lives = 3;
 			Invoke("LoadFirstLevel", levelLoadDelay);
 		}
     }
