@@ -67,6 +67,9 @@ public class Rocket : MonoBehaviour
 			case "Level6":
 				LoadLevel6();
 				break;
+			case "Level7":
+				LoadLevel7();
+				break;
             default:
                 StartDeathSequence();
                 break;
@@ -141,6 +144,23 @@ public class Rocket : MonoBehaviour
 	private void LoadLevelSix()
 	{
 		SceneManager.LoadScene("Level 6");
+	}
+
+	private void LoadLevel7()
+    {
+        print("Finished level.");
+		rocketAudio.Stop(); // Stop all sounds before success sequence
+        rocketAudio.PlayOneShot(success, 0.5f);
+		successParticles.Play();
+		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
+		mainEngineParticles.Stop(); // Hide mainEngine particles
+        state = State.Transcending;
+        Invoke("LoadLevelSeven", levelLoadDelay);
+    }
+
+	private void LoadLevelSeven()
+	{
+		SceneManager.LoadScene("Level 7");
 	}
 
 	//////////////////////////////////////////////////////////////////////////
