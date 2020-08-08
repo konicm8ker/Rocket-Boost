@@ -23,7 +23,6 @@ public class Rocket : MonoBehaviour
 	AudioSource rocketAudio;
 	enum State {Alive, Dying, Transcending};
 	State state = State.Alive;
-
 	bool collisionsDetected = true;
 
 	// Use this for initialization
@@ -50,13 +49,18 @@ public class Rocket : MonoBehaviour
 
 	}
 
-    private void RespondToDebugInput()
+    public void RespondToDebugInput()
     {
         if(Input.GetKeyDown(KeyCode.L))
-		{
-			SceneManager.LoadScene(1);
-		}
-		else if(Input.GetKeyDown(KeyCode.C))
+        {
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+			int nextScene = currentSceneIndex + 1;
+			int sceneCount = SceneManager.sceneCountInBuildSettings;
+
+            if (nextScene == sceneCount) { nextScene = 0; }
+            SceneManager.LoadScene(nextScene);
+        }
+        else if(Input.GetKeyDown(KeyCode.C))
 		{
 			collisionsDetected = !collisionsDetected;
 		}
@@ -74,115 +78,11 @@ public class Rocket : MonoBehaviour
             case "Finish":
                 StartSuccessSequence();
                 break;
-			case "Level3":
-				LoadLevel3();
-				break;
-			case "Level4":
-				LoadLevel4();
-				break;
-			case "Level5":
-				LoadLevel5();
-				break;
-			case "Level6":
-				LoadLevel6();
-				break;
-			case "Level7":
-				LoadLevel7();
-				break;
             default:
                 StartDeathSequence();
                 break;
         }
 	}
-
-	///////////////////////////////////////////////////////////////////////
-
-    private void LoadLevel3()
-    {
-        print("Finished level.");
-		rocketAudio.Stop(); // Stop all sounds before success sequence
-        rocketAudio.PlayOneShot(success, 0.5f);
-		successParticles.Play();
-		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
-		mainEngineParticles.Stop(); // Hide mainEngine particles
-        state = State.Transcending;
-        Invoke("LoadLevelThree", levelLoadDelay);
-    }
-
-	private void LoadLevelThree()
-	{
-		SceneManager.LoadScene("Level 3");
-	}
-
-	private void LoadLevel4()
-    {
-        print("Finished level.");
-		rocketAudio.Stop(); // Stop all sounds before success sequence
-        rocketAudio.PlayOneShot(success, 0.5f);
-		successParticles.Play();
-		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
-		mainEngineParticles.Stop(); // Hide mainEngine particles
-        state = State.Transcending;
-        Invoke("LoadLevelFour", levelLoadDelay);
-    }
-
-	private void LoadLevelFour()
-	{
-		SceneManager.LoadScene("Level 4");
-	}
-
-	private void LoadLevel5()
-    {
-        print("Finished level.");
-		rocketAudio.Stop(); // Stop all sounds before success sequence
-        rocketAudio.PlayOneShot(success, 0.5f);
-		successParticles.Play();
-		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
-		mainEngineParticles.Stop(); // Hide mainEngine particles
-        state = State.Transcending;
-        Invoke("LoadLevelFive", levelLoadDelay);
-    }
-
-	private void LoadLevelFive()
-	{
-		SceneManager.LoadScene("Level 5");
-	}
-
-	private void LoadLevel6()
-    {
-        print("Finished level.");
-		rocketAudio.Stop(); // Stop all sounds before success sequence
-        rocketAudio.PlayOneShot(success, 0.5f);
-		successParticles.Play();
-		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
-		mainEngineParticles.Stop(); // Hide mainEngine particles
-        state = State.Transcending;
-        Invoke("LoadLevelSix", levelLoadDelay);
-    }
-
-	private void LoadLevelSix()
-	{
-		SceneManager.LoadScene("Level 6");
-	}
-
-	private void LoadLevel7()
-    {
-        print("Finished level.");
-		rocketAudio.Stop(); // Stop all sounds before success sequence
-        rocketAudio.PlayOneShot(success, 0.5f);
-		successParticles.Play();
-		transform.localScale = new Vector3(0,0,0); // Hide rocket ship
-		mainEngineParticles.Stop(); // Hide mainEngine particles
-        state = State.Transcending;
-        Invoke("LoadLevelSeven", levelLoadDelay);
-    }
-
-	private void LoadLevelSeven()
-	{
-		SceneManager.LoadScene("Level 7");
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 
     private void StartDeathSequence()
     {
@@ -226,7 +126,13 @@ public class Rocket : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        SceneManager.LoadScene("Level 2"); // Allow for more than 2 levels
+		int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+		int nextScene = currentSceneIndex + 1;
+		int sceneCount = SceneManager.sceneCountInBuildSettings;
+
+		if(nextScene == sceneCount) { nextScene = 0; }	
+		SceneManager.LoadScene(nextScene);
+        
     }
 
 	private void LoadFirstLevel()
@@ -236,7 +142,8 @@ public class Rocket : MonoBehaviour
 
 	private void RestartCurrentLevel()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+		SceneManager.LoadScene(currentSceneIndex);
 	}
 
     private void RespondToThrustInput()

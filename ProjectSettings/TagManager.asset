@@ -5,12 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Friendly
-  - Level3
   - Wall
-  - Level4
-  - Level5
-  - Level6
-  - Level7
   layers:
   - Default
   - TransparentFX
