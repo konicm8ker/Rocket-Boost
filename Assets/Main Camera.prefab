@@ -108,6 +108,8 @@ MonoBehaviour:
   target: {fileID: 0}
   offset: 14
   speed: 0.25
+  topBorder: 72
+  bottomBorder: 22
 --- !u!124 &124841715198927884
 Behaviour:
   m_ObjectHideFlags: 1

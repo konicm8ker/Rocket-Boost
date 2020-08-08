@@ -28,7 +28,7 @@ public class Rocket : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		print("Lives: " + PlayerStats.Lives);
+		//print("Lives: " + PlayerStats.Lives);
 		rb = GetComponent<Rigidbody>();
 		rocketAudio = GetComponent<AudioSource>();
 	}
@@ -73,7 +73,7 @@ public class Rocket : MonoBehaviour
 		switch(collision.gameObject.tag)
 		{
 			case "Friendly":
-				print("OK."); // DEBUG
+				//print("Friendly collision.");
 				break;
             case "Finish":
                 StartSuccessSequence();
@@ -88,7 +88,7 @@ public class Rocket : MonoBehaviour
     {
 		if(PlayerStats.Lives > 0)
 		{
-			print("You DIED."); // DEBUG
+			//print("You DIED.");
 			rocketAudio.Stop();
 			mainEngineParticles.Stop();
 			rocketAudio.PlayOneShot(death, 0.5f);
@@ -100,7 +100,7 @@ public class Rocket : MonoBehaviour
 		}
 		else
 		{
-			print("You DIED."); // DEBUG
+			//print("You DIED.");
 			rocketAudio.Stop();
 			mainEngineParticles.Stop();
 			rocketAudio.PlayOneShot(death, 0.5f);
@@ -114,7 +114,7 @@ public class Rocket : MonoBehaviour
 
     private void StartSuccessSequence()
     {
-        print("Finished level.");
+        //print("Finished level.");
 		rocketAudio.Stop(); // Stop all sounds before success sequence
         rocketAudio.PlayOneShot(success, 0.5f);
 		successParticles.Play();
@@ -161,7 +161,7 @@ public class Rocket : MonoBehaviour
 
     private void EngageThrust()
     {
-        print("Thrust engaged!"); // DEBUG
+        //print("Thrust engaged!");
         rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
         if (!rocketAudio.isPlaying)
         {
@@ -177,12 +177,12 @@ public class Rocket : MonoBehaviour
 
         if(Input.GetKey(KeyCode.A))
 		{
-			print("Rotating left.");  // DEBUG
+			//print("Rotating left.");
 			transform.Rotate(Vector3.forward * rotationThisFrame);
 		}
 		else if(Input.GetKey(KeyCode.D))
 		{
-			print("Rotating right.");  // DEBUG
+			//print("Rotating right.");
 			transform.Rotate(-Vector3.forward * rotationThisFrame);
 		}
 

@@ -1,20 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class WallCollision : MonoBehaviour {
 
-	[SerializeField] AudioClip heavyBoom;
-	AudioSource wallSound;
+	[SerializeField] AudioSource wallSound;
 
 	// Use this for initialization
 	void Start () {
 		wallSound = GetComponent<AudioSource>();
 	}
-	
-	void OnCollisionEnter(Collision col)
+
+	void OnCollisionEnter(Collision collision)
 	{
-		if(col.gameObject.tag == "Wall" && Time.time > 1f)
+		if(collision.gameObject.tag == "Wall" && Time.time > 1)
 		{
-			wallSound.PlayOneShot(heavyBoom);
+			if(!wallSound.isPlaying) { wallSound.Play(); }	
 		}
 	}
 }
